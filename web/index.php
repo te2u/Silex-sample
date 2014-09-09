@@ -5,25 +5,20 @@ require_once __DIR__.'/../vendor/autoload.php';
 use Silex\Application;
 
 $app = new Application();
-
-$app->register(new Silex\Provider\UrlGeneratorServiceProvider());
-$app->register(new Silex\Provider\TwigServiceProvider(), array(
-    'twig.path' => __DIR__.'/../views',
-));
-
 $app['debug'] = true;
 
+$app->register(new Silex\Provider\MonologServiceProvider(), array(
+    'monolog.logfile' => __DIR__.'/../var/log/application.log',
+    'monolog.level'   => 'DEBUG',
+));
+
 $app->get('/', function(Application $app) {
-    return $app['twig']->render('04/index.twig');
-});
+    $app['monolog']->addDebug('log debug');
+    $app['monolog']->addInfo('log info');
+    $app['monolog']->addWarning('log warning');
+    $app['monolog']->addError('log warning');
 
-$app->get('/sample04-01', function(Application $app) {
-    return $app['twig']->render('04/sample04-01.twig', array('name' => 'Silex!!'));
+    return 'index';
 });
-
-$app->get('/sample04-02', function(Application $app) {
-    return $app['twig']->render('04/sample04-02.twig');
-})
-->bind('sample04-02');
 
 $app->run();
