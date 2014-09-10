@@ -1,0 +1,10 @@
+{% for error in errors %}
+{% if loop.first %}<ul>{% endif %}
+<li>{{ error }} </li>
+{% if loop.last %}</ul>{% endif %}
+{% endfor %}
+<form method="post" action="{{ path('index') }}">
+<label>name[=foo]:<input type="text" name="name" value="{{ name }}"></label><br>
+<label>pass[=foofoo]:<input type="text" name="pass" value=""></label><br>
+<button type="submit">POST</button><br>
+</form>
